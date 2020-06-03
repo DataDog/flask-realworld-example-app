@@ -81,3 +81,9 @@ This will generate a new migration script. Then run ::
 To apply the migration.
 
 For a full migration command reference, run ``flask db --help``.
+
+ddtrace-run uwsgi -H .venv2/ --http 0.0.0.0:3000 --enable-threads --module autoapp:app
+
+
+
+
