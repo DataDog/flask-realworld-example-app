@@ -22,15 +22,15 @@ except ImportError:
 blueprint = Blueprint("user", __name__)
 
 
-@blueprint.route("/iast/propagation", methods=["POST"])
+@blueprint.route("/iast/propagation", methods=["GET"])
 def iast_propagation():
     """Application Vulnerability Management has 3 key concepts: origins, propagation and sink points (vulnerabilities)
     this view validates some origins, check the propagation of different strings and multiple vulnerabilities
     """
     # Origin 1: string1
-    origin_string1 = request.form["string1"]
+    origin_string1 = request.args.get("string1")
     # Origin 2: password
-    tainted_string_2 = request.form["password"]
+    tainted_string_2 = request.args.get("password")
 
     string1 = str(origin_string1)  # String with 1 propagation range
     string2 = str(tainted_string_2)  # String with 1 propagation range
