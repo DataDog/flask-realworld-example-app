@@ -13,13 +13,13 @@ import requests
 from flask import Blueprint, Response, request
 
 try:
-    from ddtrace.appsec._iast._taint_tracking import (get_tainted_ranges,
-                                                      is_pyobject_tainted)
+    from ddtrace.appsec._iast._taint_tracking import get_tainted_ranges
+    from ddtrace.appsec._iast._taint_tracking import is_pyobject_tainted
 except ImportError:
     get_tainted_ranges = lambda x: x
     is_pyobject_tainted = lambda x: x
 
-blueprint = Blueprint("user", __name__)
+blueprint = Blueprint("security", __name__)
 
 
 @blueprint.route("/iast/propagation", methods=["GET"])
