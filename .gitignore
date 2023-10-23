@@ -55,3 +55,4 @@ dev.db
 
 # Vagrant machines
 .vagrant/**
+.env
