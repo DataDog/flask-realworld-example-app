@@ -35,13 +35,13 @@ def iast_propagation():
     string1 = str(origin_string1)  # String with 1 propagation range
     string2 = str(tainted_string_2)  # String with 1 propagation range
 
-    string3 = string1 + string2  # 2 propagation ranges
-    string4 = "-".join([string3, string3, string3])  # 6 propagation ranges
-    string5 = string4[0:20]  # 1 propagation range
-    string6 = string5.title()  # 1 propagation range
-    string7 = string6.upper()  # 1 propagation range
-    string8 = "%s_notainted" % string7  # 1 propagation range
-    string9 = "notainted_{}".format(string8)  # 1 propagation range
+    string3 = string1 + string2  # 2 propagation ranges: hiroot1234
+    string4 = "-".join([string3, string3, string3])  # 6 propagation ranges: hiroot1234-hiroot1234-hiroot1234
+    string5 = string4[0:20]  # 1 propagation range: hiroot1234-hiroot123
+    string6 = string5.title()  # 1 propagation range: Hiroot1234-Hiroot123
+    string7 = string6.upper()  # 1 propagation range: HIROOT1234-HIROOT123
+    string8 = "%s_notainted" % string7  # 1 propagation range: HIROOT1234-HIROOT123_notainted
+    string9 = "notainted_{}".format(string8)  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
 
     try:
         # Path traversal vulnerability
