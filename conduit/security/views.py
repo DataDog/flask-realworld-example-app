@@ -4,8 +4,8 @@ Security views work to validate the below Datadog products in real-world scenari
 - Application Security Management: [Link](https://docs.datadoghq.com/security/application_security/)
 - Application Vulnerability Management (IAST): [Link](https://docs.datadoghq.com/security/application_security/vulnerability_management/)
 """
-
 import json
+import os
 import random
 import subprocess
 
@@ -65,17 +65,26 @@ def iast_propagation():
         # Weak Randomness vulnerability
     _ = random.randint(1, 10)
 
+    # os path propagation
+    string10 = os.path.join(string9, "a")
+    string11 = os.path.split(string10)
+    string12 = os.path.dirname("/".join(string11))
+    string13 = os.path.basename(string12)
+    string14 = os.path.splitext(string13)[0]
+    string15 = os.path.normcase(string14)
+    string16 = os.path.splitdrive(string15)[1]
+    
     # validates default output and IAST output
     expected = "notainted_HIROOT1234-HIROOT123_notainted"
-    assert string9 == expected, f"Error, string 9 is\n{string9}\nExpected:\n{expected}"
+    assert string16 == expected, f"Error, string 16 is\n{string16}\nExpected:\n{expected}"
 
     # Insecure Cookie vulnerability
     resp = Response(
         json.dumps(
             {
-                "string_result": string9,
-                "tainted": is_pyobject_tainted(string9),
-                "ranges": str(get_tainted_ranges(string9)),
+                "string_result": string16,
+                "tainted": is_pyobject_tainted(string16),
+                "ranges": str(get_tainted_ranges(string16)),
             }
         )
     )
