@@ -42,10 +42,14 @@ def iast_propagation():
     string7 = string6.upper()  # 1 propagation range: HIROOT1234-HIROOT123
     string8 = "%s_notainted" % string7  # 1 propagation range: HIROOT1234-HIROOT123_notainted
     string9 = "notainted_{}".format(string8)  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
+    string10 = "nottainted\n" + string9  # 2 propagation ranges: notainted\nnotainted_HIROOT1234-HIROOT123_notainted
+    string11 = string10.splitlines()[1]  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
+    string12 = string11 + "_notainted"  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notaintednotainted
+    string13 = string12.rsplit("_")[0]  # 1 propagation range: notainted_HIROOT1234-HIROOT123
 
     try:
         # Path traversal vulnerability
-        m = open("/" + string9 + ".txt")
+        m = open("/" + string13 + ".txt")
         _ = m.read()
     except Exception:
         pass
@@ -73,18 +77,20 @@ def iast_propagation():
     string14 = os.path.splitext(string13)[0]
     string15 = os.path.normcase(string14)
     string16 = os.path.splitdrive(string15)[1]
+    string17 = "/" + string16
+    string18 = os.path.splitroot(string17)[2]
     
     # validates default output and IAST output
     expected = "notainted_HIROOT1234-HIROOT123_notainted"
-    assert string16 == expected, f"Error, string 16 is\n{string16}\nExpected:\n{expected}"
+    assert string18 == expected, f"Error, string 18 is\n{string18}\nExpected:\n{expected}"
 
     # Insecure Cookie vulnerability
     resp = Response(
         json.dumps(
             {
-                "string_result": string16,
-                "tainted": is_pyobject_tainted(string16),
-                "ranges": str(get_tainted_ranges(string16)),
+                "string_result": string18,
+                "tainted": is_pyobject_tainted(string18),
+                "ranges": str(get_tainted_ranges(string18)),
             }
         )
     )
