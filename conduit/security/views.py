@@ -79,7 +79,7 @@ def iast_propagation():
     string20 = os.path.splitdrive(string19)[1]  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
 
     # validates default output and IAST output
-    expected = "HIROOT1234-HIROOT123"
+    expected = "notainted_HIROOT1234-HIROOT123_notainted"
     assert string20 == expected, f"Error, string 18 is\n{string18}\nExpected:\n{expected}"
 
     # Insecure Cookie vulnerability
