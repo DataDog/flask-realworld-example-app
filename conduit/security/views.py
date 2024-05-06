@@ -70,19 +70,17 @@ def iast_propagation():
     _ = random.randint(1, 10)
 
     # os path propagation
-    string10 = os.path.join(string9, "a")
-    string11 = os.path.split(string10)
-    string12 = os.path.dirname("/".join(string11))
-    string13 = os.path.basename(string12)
-    string14 = os.path.splitext(string13)[0]
-    string15 = os.path.normcase(string14)
-    string16 = os.path.splitdrive(string15)[1]
-    string17 = "/" + string16
-    string18 = os.path.splitroot(string17)[2]
-    
+    string14 = os.path.join(string13, "a") # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted/a
+    string15 = os.path.split(string14)[0] # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
+    string16 = os.path.dirname("/".join(string15))  # 1 propagation range: notainted_HIROOT1234-HIROOT123
+    string17 = os.path.basename("/foobar/" + string16)  # 1 propagation range: HIROOT1234-HIROOT123
+    string18 = os.path.splitext(string17 + ".jpg")[0]  # 1 propagation range: HIROOT1234-HIROOT123
+    string19 = os.path.normcase(string18)  # 1 propagation range: HIROOT1234-HIROOT123
+    string20 = os.path.splitdrive(string19)[1]  # 1 propagation range: HIROOT1234-HIROOT123
+
     # validates default output and IAST output
-    expected = "notainted_HIROOT1234-HIROOT123_notainted"
-    assert string18 == expected, f"Error, string 18 is\n{string18}\nExpected:\n{expected}"
+    expected = "HIROOT1234-HIROOT123"
+    assert string20 == expected, f"Error, string 18 is\n{string18}\nExpected:\n{expected}"
 
     # Insecure Cookie vulnerability
     resp = Response(
