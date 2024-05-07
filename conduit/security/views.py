@@ -9,7 +9,9 @@ import os
 import random
 import subprocess
 
-import requests
+# See comment below on the (disabled) SSRF test
+# import requests
+import urllib3
 from flask import Blueprint, Response, request
 
 try:
@@ -62,7 +64,10 @@ def iast_propagation():
 
     try:
         # SSRF vulnerability
-        requests.get("http://" + string9)
+        # NOTE: `requests` disabled because there seem to be a leak on ddtrace/contrib/requests/connection.py on
+        # this specific case that hides other potential leaks caused by our aspects
+        # requests.get("http://" + string9)
+         urllib3.request("GET", "http://" + string9)
     except Exception:
         pass
 
