@@ -62,14 +62,15 @@ def iast_propagation():
     except Exception:
         pass
 
-    try:
-        # SSRF vulnerability
-        # NOTE: `requests` disabled because there seem to be a leak on ddtrace/contrib/requests/connection.py on
-        # this specific case that hides other potential leaks caused by our aspects
-        # requests.get("http://" + string9)
-         urllib3.request("GET", "http://" + string9)
-    except Exception:
-        pass
+    # Note: this seems to have a leak on ddtrace/contrib/requests/connection.py on the line:
+    # with tracer.trace(operation_name, service=service, resource=f"{method} {path}", span_type=SpanTypes.HTTP) as span:
+    # Since this hides other potential leaks caused by our aspects, we disabled this test
+    # try:
+    #     # SSRF vulnerability
+    #     # requests.get("http://" + string9)
+    #      urllib3.request("GET", "http://" + string9)
+    # except Exception:
+    #     pass
 
         # Weak Randomness vulnerability
     _ = random.randint(1, 10)
