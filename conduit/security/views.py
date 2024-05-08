@@ -99,5 +99,7 @@ def iast_propagation():
         )
     )
     resp.set_cookie("insecure", "cookie", secure=False, httponly=False, samesite="None")
+    resp.headers["Vary"] = string20
+    resp.headers['Header-Injection'] = string20
 
     return resp
