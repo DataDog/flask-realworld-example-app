@@ -11,7 +11,7 @@ import subprocess
 
 # See comment below on the (disabled) SSRF test
 # import requests
-import urllib3
+# import urllib3
 from flask import Blueprint, Response, request
 
 try:
