@@ -76,20 +76,17 @@ def iast_propagation():
     _ = random.randint(1, 10)
 
     # os path propagation
-    # string14 = os.path.join(string13, "a")  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted/a
-    # string15 = os.path.split(string14)[0]  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
-    # string16 = os.path.dirname(
-    #     string15 + "/" + "foobar")  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
-    # string17 = os.path.basename(
-    #     "/foobar/" + string16)  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
-    # string18 = os.path.splitext(string17 + ".jpg")[0]  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
-    # string19 = os.path.normcase(string18)  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
-    # string20 = os.path.splitdrive(string19)[1]  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
-
+    string14 = os.path.join(string13, "a") # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted/a
+    string15 = os.path.split(string14)[0] # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
+    string16 = os.path.dirname(string15 + "/" + "foobar")  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
+    string17 = os.path.basename("/foobar/" + string16)  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
+    string18 = os.path.splitext(string17 + ".jpg")[0]  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
+    string19 = os.path.normcase(string18)  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
+    string20 = os.path.splitdrive(string19)[1]  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
 
     # validates default output and IAST output
-    # expected = "notainted_HIROOT1234-HIROOT123_notainted"
-    # assert string20 == expected, f"Error, string 18 is\n{string18}\nExpected:\n{expected}"
+    expected = "notainted_HIROOT1234-HIROOT123_notainted"
+    assert string20 == expected, f"Error, string 18 is\n{string18}\nExpected:\n{expected}"
 
     # Insecure Cookie vulnerability
     resp = Response(
@@ -102,7 +99,7 @@ def iast_propagation():
         )
     )
     resp.set_cookie("insecure", "cookie", secure=False, httponly=False, samesite="None")
-    resp.headers["Vary"] = string13
-    resp.headers['Header-Injection'] = string13
+    resp.headers["Vary"] = string20
+    resp.headers['Header-Injection'] = string20
 
     return resp
