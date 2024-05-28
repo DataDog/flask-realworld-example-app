@@ -35,7 +35,6 @@ blueprint = Blueprint("articles", __name__)
         "offset": fields.Int(),
     }
 )
-@marshal_with(articles_schema)
 @blueprint.route("/api/articles", methods=("GET",))
 def get_articles(tag=None, author=None, favorited=None, limit=20, offset=0):
     res = Article.query
@@ -45,7 +44,7 @@ def get_articles(tag=None, author=None, favorited=None, limit=20, offset=0):
         res = res.join(Article.author).join(User).filter(User.username == author)
     if favorited:
         res = res.join(Article.favoriters).filter(User.username == favorited)
-    return res.offset(offset).limit(limit).all()
+    return articles_schema.dump(res.offset(offset).limit(limit).all())
 
 
 @jwt_required

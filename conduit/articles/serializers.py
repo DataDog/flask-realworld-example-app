@@ -28,7 +28,8 @@ class ArticleSchema(Schema):
 
     @post_dump
     def dump_article(self, data, **kwargs):
-        data['author'] = data['author']['profile']
+        if 'profile' in data['author']:
+            data['author'] = data['author']['profile']
         return {'article': data}
 
     class Meta:
