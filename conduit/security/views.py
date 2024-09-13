@@ -90,17 +90,19 @@ def iast_propagation():
     string19 = os.path.normcase(string18)  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
     string20 = os.path.splitdrive(string19)[1]  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
 
+    string20 += "_extend"
+
     # validates default output and IAST output
-    expected = "notainted_HIROOT1234-HIROOT123_notainted"
-    assert string20 == expected, f"Error, string 18 is\n{string18}\nExpected:\n{expected}"
+    expected = "notainted_HIROOT1234-HIROOT123_notainted_extend"
+    assert string20 == expected, f"Error, string 18 is\n{string20}\nExpected:\n{expected}"
 
     # Insecure Cookie vulnerability
     resp = Response(
         json.dumps(
             {
-                "string_result": string18,
-                "tainted": is_pyobject_tainted(string18),
-                "ranges": str(get_tainted_ranges(string18)),
+                "string_result": string20,
+                "tainted": is_pyobject_tainted(string20),
+                "ranges": str(get_tainted_ranges(string20)),
             }
         )
     )
@@ -189,6 +191,8 @@ def get_articles(tag=None, author=None, favorited=None, limit=20, offset=0):
     string18 = os.path.splitext(string17 + ".jpg")[0]  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
     string19 = os.path.normcase(string18)  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
     string20 = os.path.splitdrive(string19)[1]  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
+
+    string20 += "_extend"
 
     resp.set_cookie("insecure", "cookie", secure=False, httponly=False, samesite="None")
     resp.headers["Vary"] = string20
