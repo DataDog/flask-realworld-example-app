@@ -1,0 +1,30 @@
+name: Check Format
+
+on:
+  push:
+    branches:
+      - main
+      - 'mq-working-branch**'
+  pull_request:
+  workflow_dispatch: {}
+
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        # Include all history and tags
+        with:
+          fetch-depth: 0
+
+      - name: Install hatch
+        uses: pypa/hatch@install
+        with:
+          version: "1.12.0"
+
+      - name: Run tests
+        run: hatch run lint:fmt
+        with:
+          python-version: "3.11"
