@@ -20,14 +20,14 @@ class UserSchema(Schema):
 
     @pre_load
     def make_user(self, data, **kwargs):
-        data = data["user"]
+        user_data = data["user"]
         # some of the frontends send this like an empty string and some send
         # null
-        if not data.get("email", True):
-            del data["email"]
-        if not data.get("image", True):
-            del data["image"]
-        return data
+        if not user_data.get("email", True):
+            del user_data["email"]
+        if not user_data.get("image", True):
+            del user_data["image"]
+        return user_data
 
     @post_dump
     def dump_user(self, data, **kwargs):
