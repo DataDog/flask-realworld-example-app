@@ -4,7 +4,7 @@ dynamic = ["version"]
 description = "Datadog Flask Real World example"
 readme = "README.md"
 license = { text = "LICENSE.BSD3" }
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 authors = [
     { name = "Datadog, Inc.", email = "dev@datadoghq.com" },
 ]
@@ -13,8 +13,6 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",

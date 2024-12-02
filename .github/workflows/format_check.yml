@@ -1,4 +1,4 @@
-name: Check Format
+name: Check-Format
 
 on:
   push:
