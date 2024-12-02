@@ -85,4 +85,4 @@ test = [
 ]
 
 [[envs.unit_tests.matrix]]
-python = ["3.12", "3.11", "3.10"]
+python = ["3.12", "3.11", "3.10", "3.9"]
