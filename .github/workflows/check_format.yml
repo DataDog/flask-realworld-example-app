@@ -24,5 +24,3 @@ jobs:
 
       - name: Check Format
         run: hatch run lint:fmt
-        with:
-          python-version: "3.11"
