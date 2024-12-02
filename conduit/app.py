@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
 """The app module, containing the app factory function."""
 from flask import Flask
-from conduit.extensions import bcrypt, cache, db, migrate, jwt, cors
 
-from conduit import commands, user, profile, articles, security
-from conduit.settings import ProdConfig
+from conduit import articles
+from conduit import commands
+from conduit import profile
+from conduit import security
+from conduit import user
 from conduit.exceptions import InvalidUsage
+from conduit.extensions import bcrypt
+from conduit.extensions import cache
+from conduit.extensions import db
+from conduit.extensions import jwt
+from conduit.extensions import migrate
+from conduit.settings import ProdConfig
 
 
 def create_app(config_object=ProdConfig):
@@ -14,7 +22,7 @@ def create_app(config_object=ProdConfig):
 
     :param config_object: The configuration object to use.
     """
-    app = Flask(__name__.split('.')[0])
+    app = Flask(__name__.split(".")[0])
     app.url_map.strict_slashes = False
     app.config.from_object(config_object)
     register_extensions(app)
@@ -36,12 +44,6 @@ def register_extensions(app):
 
 def register_blueprints(app):
     """Register Flask blueprints."""
-    origins = app.config.get('CORS_ORIGIN_WHITELIST', '*')
-    cors.init_app(user.views.blueprint, origins=origins)
-    cors.init_app(profile.views.blueprint, origins=origins)
-    cors.init_app(articles.views.blueprint, origins=origins)
-    cors.init_app(security.views.blueprint, origins=origins)
-
     app.register_blueprint(user.views.blueprint)
     app.register_blueprint(profile.views.blueprint)
     app.register_blueprint(articles.views.blueprint)
@@ -49,7 +51,6 @@ def register_blueprints(app):
 
 
 def register_errorhandlers(app):
-
     def errorhandler(error):
         response = error.to_json()
         response.status_code = error.status_code
@@ -60,15 +61,16 @@ def register_errorhandlers(app):
 
 def register_shellcontext(app):
     """Register shell context objects."""
+
     def shell_context():
         """Shell context objects."""
         return {
-            'db': db,
-            'User': user.models.User,
-            'UserProfile': profile.models.UserProfile,
-            'Article': articles.models.Article,
-            'Tag': articles.models.Tags,
-            'Comment': articles.models.Comment,
+            "db": db,
+            "User": user.models.User,
+            "UserProfile": profile.models.UserProfile,
+            "Article": articles.models.Article,
+            "Tag": articles.models.Tags,
+            "Comment": articles.models.Comment,
         }
 
     app.shell_context_processor(shell_context)

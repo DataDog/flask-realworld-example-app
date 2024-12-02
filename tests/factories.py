@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Factories to help in tests."""
-from factory import PostGenerationMethodCall, Sequence
+from factory import PostGenerationMethodCall
+from factory import Sequence
 from factory.alchemy import SQLAlchemyModelFactory
 
 from conduit.database import db
@@ -20,9 +21,9 @@ class BaseFactory(SQLAlchemyModelFactory):
 class UserFactory(BaseFactory):
     """User factory."""
 
-    username = Sequence(lambda n: 'user{0}'.format(n))
-    email = Sequence(lambda n: 'user{0}@example.com'.format(n))
-    password = PostGenerationMethodCall('set_password', 'example')
+    username = Sequence(lambda n: "user{0}".format(n))
+    email = Sequence(lambda n: "user{0}@example.com".format(n))
+    password = PostGenerationMethodCall("set_password", "example")
 
     class Meta:
         """Factory configuration."""

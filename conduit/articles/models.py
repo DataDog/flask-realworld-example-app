@@ -5,21 +5,30 @@ import datetime as dt
 from flask_jwt_extended import current_user
 from slugify import slugify
 
-from conduit.database import (Model, SurrogatePK, db, Column,
-                              reference_col, relationship)
+from conduit.database import Column
+from conduit.database import Model
+from conduit.database import SurrogatePK
+from conduit.database import db
+from conduit.database import reference_col
+from conduit.database import relationship
 from conduit.profile.models import UserProfile
 
-favoriter_assoc = db.Table("favoritor_assoc",
-                           db.Column("favoriter", db.Integer, db.ForeignKey("userprofile.id")),
-                           db.Column("favorited_article", db.Integer, db.ForeignKey("article.id")))
 
-tag_assoc = db.Table("tag_assoc",
-                     db.Column("tag", db.Integer, db.ForeignKey("tags.id")),
-                     db.Column("article", db.Integer, db.ForeignKey("article.id")))
+favoriter_assoc = db.Table(
+    "favoritor_assoc",
+    db.Column("favoriter", db.Integer, db.ForeignKey("userprofile.id")),
+    db.Column("favorited_article", db.Integer, db.ForeignKey("article.id")),
+)
+
+tag_assoc = db.Table(
+    "tag_assoc",
+    db.Column("tag", db.Integer, db.ForeignKey("tags.id")),
+    db.Column("article", db.Integer, db.ForeignKey("article.id")),
+)
 
 
 class Tags(Model):
-    __tablename__ = 'tags'
+    __tablename__ = "tags"
 
     id = db.Column(db.Integer, primary_key=True)
     tagname = db.Column(db.String(100))
@@ -32,22 +41,22 @@ class Tags(Model):
 
 
 class Comment(Model, SurrogatePK):
-    __tablename__ = 'comment'
+    __tablename__ = "comment"
 
     id = db.Column(db.Integer, primary_key=True)
     body = Column(db.Text)
     createdAt = Column(db.DateTime, nullable=False, default=dt.datetime.utcnow)
     updatedAt = Column(db.DateTime, nullable=False, default=dt.datetime.utcnow)
-    author_id = reference_col('userprofile', nullable=False)
-    author = relationship('UserProfile', backref=db.backref('comments'))
-    article_id = reference_col('article', nullable=False)
+    author_id = reference_col("userprofile", nullable=False)
+    author = relationship("UserProfile", backref=db.backref("comments"))
+    article_id = reference_col("article", nullable=False)
 
     def __init__(self, article, author, body, **kwargs):
         db.Model.__init__(self, author=author, body=body, article=article, **kwargs)
 
 
 class Article(SurrogatePK, Model):
-    __tablename__ = 'article'
+    __tablename__ = "article"
 
     id = db.Column(db.Integer, primary_key=True)
     slug = Column(db.Text, unique=True)
@@ -56,22 +65,18 @@ class Article(SurrogatePK, Model):
     body = Column(db.Text)
     createdAt = Column(db.DateTime, nullable=False, default=dt.datetime.utcnow)
     updatedAt = Column(db.DateTime, nullable=False, default=dt.datetime.utcnow)
-    author_id = reference_col('userprofile', nullable=False)
-    author = relationship('UserProfile', backref=db.backref('articles'))
-    favoriters = relationship(
-        'UserProfile',
-        secondary=favoriter_assoc,
-        backref='favorites',
-        lazy='dynamic')
+    author_id = reference_col("userprofile", nullable=False)
+    author = relationship("UserProfile", backref=db.backref("articles"))
+    favoriters = relationship("UserProfile", secondary=favoriter_assoc, backref="favorites", lazy="dynamic")
 
-    tagList = relationship(
-        'Tags', secondary=tag_assoc, backref='articles')
+    tagList = relationship("Tags", secondary=tag_assoc, backref="articles")
 
-    comments = relationship('Comment', backref=db.backref('article'), lazy='dynamic')
+    comments = relationship("Comment", backref=db.backref("article"), lazy="dynamic")
 
     def __init__(self, author, title, body, description, slug=None, **kwargs):
-        db.Model.__init__(self, author=author, title=title, description=description, body=body,
-                          slug=slug or slugify(title), **kwargs)
+        db.Model.__init__(
+            self, author=author, title=title, description=description, body=body, slug=slug or slugify(title), **kwargs
+        )
 
     def favourite(self, profile):
         if not self.is_favourite(profile):

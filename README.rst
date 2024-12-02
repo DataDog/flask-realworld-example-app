@@ -64,7 +64,7 @@ Running Tests
 
 To run all tests, run ::
 
-    flask test
+    python -m pytest -vvv -s
 
 
 Migrations

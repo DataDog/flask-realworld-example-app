@@ -6,14 +6,13 @@ from webtest import TestApp
 
 from conduit.app import create_app
 from conduit.database import db as _db
-from conduit.settings import TestConfig
 from conduit.profile.models import UserProfile
-
+from conduit.settings import TestConfig
 
 from .factories import UserFactory
 
 
-@pytest.yield_fixture(scope='function')
+@pytest.yield_fixture()
 def app():
     """An application for the tests."""
     _app = create_app(TestConfig)
@@ -21,27 +20,20 @@ def app():
     with _app.app_context():
         _db.create_all()
 
-    ctx = _app.test_request_context()
-    ctx.push()
-
-    yield _app
-
-    ctx.pop()
+        yield _app
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def testapp(app):
     """A Webtest app."""
     return TestApp(app)
 
 
-@pytest.yield_fixture(scope='function')
+@pytest.yield_fixture(scope="function")
 def db(app):
     """A database for the tests."""
     _db.app = app
-    with app.app_context():
-        _db.create_all()
-
+    _db.create_all()
     yield _db
 
     # Explicitly close DB connection
@@ -52,10 +44,12 @@ def db(app):
 @pytest.fixture
 def user(db):
     """A user for the tests."""
-    class User():
+
+    class User:
         def get(self):
-            muser = UserFactory(password='myprecious')
+            muser = UserFactory(password="myprecious")
             UserProfile(muser).save()
             db.session.commit()
             return muser
+
     return User()

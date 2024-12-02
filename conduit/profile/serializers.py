@@ -1,4 +1,7 @@
-from marshmallow import Schema, fields, pre_load, post_dump
+from marshmallow import Schema
+from marshmallow import fields
+from marshmallow import post_dump
+from marshmallow import pre_load
 
 
 class ProfileSchema(Schema):
@@ -9,15 +12,15 @@ class ProfileSchema(Schema):
     image = fields.Url()
     following = fields.Boolean()
     # ugly hack.
-    profile = fields.Nested('self', exclude=('profile',), default=True, load_only=True)
+    profile = fields.Nested("self", exclude=("profile",), default=True, load_only=True)
 
     @pre_load
     def make_user(self, data, **kwargs):
-        return data['profile']
+        return data["profile"]
 
     @post_dump
     def dump_user(self, data, **kwargs):
-        return {'profile': data}
+        return {"profile": data}
 
     class Meta:
         strict = True

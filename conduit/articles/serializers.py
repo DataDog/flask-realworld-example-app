@@ -1,6 +1,9 @@
 # coding: utf-8
 
-from marshmallow import Schema, fields, pre_load, post_dump
+from marshmallow import Schema
+from marshmallow import fields
+from marshmallow import post_dump
+from marshmallow import pre_load
 
 from conduit.profile.serializers import ProfileSchema
 
@@ -17,35 +20,34 @@ class ArticleSchema(Schema):
     body = fields.Str()
     updatedAt = fields.DateTime(dump_only=True)
     author = fields.Nested(ProfileSchema)
-    article = fields.Nested('self', exclude=('article',), default=True, load_only=True)
+    article = fields.Nested("self", exclude=("article",), default=True, load_only=True)
     tagList = fields.List(fields.Str())
     favoritesCount = fields.Int(dump_only=True)
     favorited = fields.Bool(dump_only=True)
 
     @pre_load
     def make_article(self, data, **kwargs):
-        return data['article']
+        return data["article"]
 
     @post_dump
     def dump_article(self, data, **kwargs):
-        if 'profile' in data['author']:
-            data['author'] = data['author']['profile']
-        return {'article': data}
+        if "profile" in data["author"]:
+            data["author"] = data["author"]["profile"]
+        return {"article": data}
 
     class Meta:
         strict = True
 
 
 class ArticleSchemas(ArticleSchema):
-
     @post_dump
     def dump_article(self, data, **kwargs):
-        data['author'] = data['author']['profile']
+        data["author"] = data["author"]["profile"]
         return data
 
     @post_dump(pass_many=True)
     def dump_articles(self, data, many, **kwargs):
-        return {'articles': data, 'articlesCount': len(data)}
+        return {"articles": data, "articlesCount": len(data)}
 
 
 class CommentSchema(Schema):
@@ -56,31 +58,30 @@ class CommentSchema(Schema):
     id = fields.Int()
 
     # for the envelope
-    comment = fields.Nested('self', exclude=('comment',), default=True, load_only=True)
+    comment = fields.Nested("self", exclude=("comment",), default=True, load_only=True)
 
     @pre_load
     def make_comment(self, data, **kwargs):
-        return data['comment']
+        return data["comment"]
 
     @post_dump
     def dump_comment(self, data, **kwargs):
-        data['author'] = data['author']['profile']
-        return {'comment': data}
+        data["author"] = data["author"]["profile"]
+        return {"comment": data}
 
     class Meta:
         strict = True
 
 
 class CommentsSchema(CommentSchema):
-
     @post_dump
     def dump_comment(self, data, **kwargs):
-        data['author'] = data['author']['profile']
+        data["author"] = data["author"]["profile"]
         return data
 
     @post_dump(pass_many=True)
     def make_comment(self, data, many, **kwargs):
-        return {'comments': data}
+        return {"comments": data}
 
 
 article_schema = ArticleSchema()

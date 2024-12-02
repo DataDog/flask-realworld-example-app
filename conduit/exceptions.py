@@ -2,14 +2,14 @@ from flask import jsonify
 
 
 def template(data, code=500):
-    return {'message': {'errors': {'body': data}}, 'status_code': code}
+    return {"message": {"errors": {"body": data}}, "status_code": code}
 
 
-USER_NOT_FOUND = template(['User not found'], code=404)
-USER_ALREADY_REGISTERED = template(['User already registered'], code=422)
+USER_NOT_FOUND = template(["User not found"], code=404)
+USER_ALREADY_REGISTERED = template(["User already registered"], code=422)
 UNKNOWN_ERROR = template([], code=500)
-ARTICLE_NOT_FOUND = template(['Article not found'], code=404)
-COMMENT_NOT_OWNED = template(['Not your article'], code=422)
+ARTICLE_NOT_FOUND = template(["Article not found"], code=404)
+COMMENT_NOT_OWNED = template(["Not your article"], code=422)
 
 
 class InvalidUsage(Exception):
