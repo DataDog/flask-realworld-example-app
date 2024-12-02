@@ -2,7 +2,7 @@
 name = "flask-realworld-example-app"
 dynamic = ["version"]
 description = "Datadog Flask Real World example"
-readme = "README.rst"
+readme = "README.md"
 license = { text = "LICENSE.BSD3" }
 requires-python = ">=3.7"
 authors = [
