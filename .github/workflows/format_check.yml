@@ -10,9 +10,8 @@ on:
 
 
 jobs:
-  unit-tests:
+  check-format:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
         # Include all history and tags

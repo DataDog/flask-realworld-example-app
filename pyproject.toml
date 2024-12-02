@@ -1,3 +1,6 @@
+[tool.setuptools]
+package-dir = {"" = "conduit"}
+
 [project]
 name = "flask-realworld-example-app"
 dynamic = ["version"]
