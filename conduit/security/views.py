@@ -10,26 +10,33 @@ import random
 import re
 import subprocess
 
-# See comment below on the (disabled) SSRF test
-# import requests
-import urllib3
-from flask import Blueprint, Response, request
-
+from flask import Blueprint
+from flask import Response
+from flask import request
 from flask_apispec import use_kwargs
 from flask_jwt_extended import jwt_required
 from marshmallow import fields
-from conduit.articles.models import Article, Tags
+
+# See comment below on the (disabled) SSRF test
+# import requests
+import urllib3
+
+from conduit.articles.models import Article
+from conduit.articles.models import Tags
 from conduit.articles.serializers import articles_schema
+from conduit.security.vulnerabilities import my_function_with_weak_hash
 from conduit.user.models import User
+
 
 try:
     from ddtrace.appsec._iast._taint_tracking import get_tainted_ranges
     from ddtrace.appsec._iast._taint_tracking import is_pyobject_tainted
 except ImportError:
-    get_tainted_ranges = lambda x: x
-    is_pyobject_tainted = lambda x: x
+    get_tainted_ranges = lambda x: x  # noqa: E731
+    is_pyobject_tainted = lambda x: x  # noqa: E731
 
 blueprint = Blueprint("security", __name__)
+
 
 def _iast_propagation():
     # Origin 1: string1
@@ -71,7 +78,7 @@ def _iast_propagation():
     try:
         # SSRF vulnerability
         # requests.get("http://" + string9)
-         urllib3.request("GET", "http://" + string9)
+        urllib3.request("GET", "http://" + string9)
     except Exception:
         pass
 
@@ -79,9 +86,11 @@ def _iast_propagation():
     _ = random.randint(1, 10)
 
     # os path propagation
-    string14 = os.path.join(string13, "a") # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted/a
-    string15 = os.path.split(string14)[0] # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
-    string16 = os.path.dirname(string15 + "/" + "foobar")  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
+    string14 = os.path.join(string13, "a")  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted/a
+    string15 = os.path.split(string14)[0]  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
+    string16 = os.path.dirname(
+        string15 + "/" + "foobar"
+    )  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
     string17 = os.path.basename("/foobar/" + string16)  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
     string18 = os.path.splitext(string17 + ".jpg")[0]  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
     string19 = os.path.normcase(string18)  # 1 propagation range: notainted_HIROOT1234-HIROOT123_notainted
@@ -118,6 +127,16 @@ def _iast_propagation():
 
     return string27
 
+
+@blueprint.route("/iast/weak_hash/")
+def weak_hash():
+    response = b""
+    data = request.args.get("q")
+    if data:
+        response = data.encode()
+    return my_function_with_weak_hash(response)
+
+
 @blueprint.route("/iast/propagation", methods=["GET"])
 def iast_propagation():
     """Application Vulnerability Management has 3 key concepts: origins, propagation and sink points (vulnerabilities)
@@ -137,7 +156,7 @@ def iast_propagation():
     )
     resp.set_cookie("insecure", "cookie", secure=False, httponly=False, samesite="None")
     resp.headers["Vary"] = result
-    resp.headers['Header-Injection'] = result
+    resp.headers["Header-Injection"] = result
 
     return resp
 
@@ -169,6 +188,6 @@ def get_articles(tag=None, author=None, favorited=None, limit=20, offset=0):
 
     resp.set_cookie("insecure", "cookie", secure=False, httponly=False, samesite="None")
     resp.headers["Vary"] = result
-    resp.headers['Header-Injection'] = result
+    resp.headers["Header-Injection"] = result
 
     return resp

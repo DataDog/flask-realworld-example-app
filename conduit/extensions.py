@@ -3,11 +3,11 @@
 
 from flask_bcrypt import Bcrypt
 from flask_caching import Cache
-from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy.model import Model
+
 
 class CRUDMixin(Model):
     """Mixin that adds convenience methods for CRUD (create, read, update, delete) operations."""
@@ -41,7 +41,6 @@ bcrypt = Bcrypt()
 db = SQLAlchemy(model_class=CRUDMixin)
 migrate = Migrate()
 cache = Cache()
-cors = CORS()
 
 from conduit.utils import jwt_identity, identity_loader  # noqa
 
