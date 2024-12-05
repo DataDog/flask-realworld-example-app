@@ -2,6 +2,7 @@
 -r prod.txt
 
 # Testing
+ddtrace
 pytest
 WebTest
 factory-boy
