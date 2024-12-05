@@ -55,6 +55,7 @@ class TestConfig(Config):
     """Test configuration."""
 
     TESTING = True
+    SERVER_NAME = "localhost"
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = "sqlite://"
     # For faster tests; needs at least 4 to avoid "ValueError: Invalid rounds"
