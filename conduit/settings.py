@@ -9,7 +9,6 @@ class Config(object):
 
     SECRET_KEY = os.environ.get("CONDUIT_SECRET", "secret-key")  # TODO: Change me
     APPLICATION_ROOT = "/"
-    SERVER_NAME = "localhost"
     APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
     BCRYPT_LOG_ROUNDS = 13
@@ -56,6 +55,7 @@ class TestConfig(Config):
     """Test configuration."""
 
     TESTING = True
+    SERVER_NAME = "localhost"
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = "sqlite://"
     # For faster tests; needs at least 4 to avoid "ValueError: Invalid rounds"
