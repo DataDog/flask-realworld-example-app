@@ -11,5 +11,12 @@ CONFIG = DevConfig if get_debug_flag() else ProdConfig
 
 app = create_app(CONFIG)
 
+
+@app.route("/")
+@app.route("/index")
+def index():
+    return "HELLO"
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=8000)

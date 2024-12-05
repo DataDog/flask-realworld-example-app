@@ -16,14 +16,12 @@ from flask import request
 from flask_apispec import use_kwargs
 from flask_jwt_extended import jwt_required
 from marshmallow import fields
-
-# See comment below on the (disabled) SSRF test
-# import requests
 import urllib3
 
 from conduit.articles.models import Article
 from conduit.articles.models import Tags
 from conduit.articles.serializers import articles_schema
+from conduit.security.vulnerabilities import my_function_with_sqli
 from conduit.security.vulnerabilities import my_function_with_weak_hash
 from conduit.user.models import User
 
@@ -128,13 +126,16 @@ def _iast_propagation():
     return string27
 
 
-@blueprint.route("/iast/weak_hash/")
-def weak_hash():
-    response = b""
+@blueprint.route("/iast/weak_hash")
+def iast_weak_hash():
     data = request.args.get("q")
-    if data:
-        response = data.encode()
-    return my_function_with_weak_hash(response)
+    return my_function_with_weak_hash(data)
+
+
+@blueprint.route("/iast/sqli/")
+def iast_sqli():
+    data = request.args.get("q")
+    return my_function_with_sqli(data)
 
 
 @blueprint.route("/iast/propagation", methods=["GET"])
