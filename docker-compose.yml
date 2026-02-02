@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=autoapp.py
+      - FLASK_DEBUG=1
+      - DATABASE_URL=postgresql://conduit:conduit@db:5432/conduit
+      - CONDUIT_SECRET=dev-secret-key
+      - DD_AGENT_HOST=datadog-agent
+      - DD_SERVICE=flask-realworld-app
+      - DD_ENV=development
+      - DD_TRACE_ENABLED=true
+      - DD_IAST_ENABLED=true
+    depends_on:
+      - db
+      - datadog-agent
+    volumes:
+      - .:/app
+    command: ddtrace-run flask run --host=0.0.0.0
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=conduit
+      - POSTGRES_USER=conduit
+      - POSTGRES_PASSWORD=conduit
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  datadog-agent:
+    image: gcr.io/datadoghq/agent:latest
+    environment:
+      - DD_API_KEY=${DD_API_KEY:-your-api-key-here}
+      - DD_SITE=${DD_SITE:-datadoghq.com}
+      - DD_APM_ENABLED=true
+      - DD_APM_NON_LOCAL_TRAFFIC=true
+      - DD_LOGS_ENABLED=true
+      - DD_PROCESS_AGENT_ENABLED=true
+    ports:
+      - "8126:8126"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+
+volumes:
+  postgres_data:

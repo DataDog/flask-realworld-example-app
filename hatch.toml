@@ -74,3 +74,8 @@ test = [
 
 [[envs.unit_tests.matrix]]
 python = ["3.14", "3.13", "3.12", "3.11", "3.10", "3.9"]
+
+[envs.unit_tests.scripts]
+cov = [
+    "pytest --cov=conduit --cov-report=xml --cov-report=html --cov-report=term -vvv tests/",
+]
