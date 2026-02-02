@@ -4,9 +4,9 @@ package-dir = {"" = "conduit"}
 [project]
 name = "flask-realworld-example-app"
 dynamic = ["version"]
-description = "Datadog Flask Real World example"
+description = "Flask RealWorld API implementation with Datadog APM, ASM, and IAST for security testing and monitoring"
 readme = "README.md"
-license = { text = "LICENSE.BSD3" }
+license = { text = "MIT" }
 requires-python = ">=3.9"
 authors = [
     { name = "Datadog, Inc.", email = "dev@datadoghq.com" },
@@ -22,6 +22,18 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+]
+keywords = [
+    "flask",
+    "realworld",
+    "datadog",
+    "apm",
+    "asm",
+    "iast",
+    "security",
+    "testing",
+    "api",
+    "rest",
 ]
 
 [project.urls]

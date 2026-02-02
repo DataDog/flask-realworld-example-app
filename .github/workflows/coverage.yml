@@ -1,0 +1,31 @@
+name: Code Coverage
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: Install hatch
+        uses: pypa/hatch@install
+        with:
+          version: "1.16.3"
+
+      - name: Run tests with coverage
+        run: |
+          hatch run +py=3.12 unit_tests:cov
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false

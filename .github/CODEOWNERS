@@ -1,0 +1,5 @@
+# Order matters, the last matched is what is used
+
+# APM Core Python is the default owner of all files
+*                                   @DataDog/python-guild
+conduit/security/*                  @DataDog/python-guild  @DataDog/asm-python
