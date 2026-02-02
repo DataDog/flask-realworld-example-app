@@ -65,17 +65,16 @@ CMAKE_BUILD_PARALLEL_LEVEL="6"
 DD_SERVICE = "flask-realworld-example-app-tests"
 DD_ENV = "test"
 DD_API_KEY = ""
+
 [envs.unit_tests.scripts]
 test = [
     "python -m pip install -r requirements/dev.txt",
     "pip freeze",
     "python -m pytest -s --ddtrace --ddtrace-patch-all --no-cov",
 ]
-
-[[envs.unit_tests.matrix]]
-python = ["3.14", "3.13", "3.12", "3.11", "3.10", "3.9"]
-
-[envs.unit_tests.scripts]
 cov = [
     "pytest --cov=conduit --cov-report=xml --cov-report=html --cov-report=term -vvv tests/",
 ]
+
+[[envs.unit_tests.matrix]]
+python = ["3.14", "3.13", "3.12", "3.11", "3.10", "3.9"]
