@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test configs."""
+
 from conduit.app import create_app
 from conduit.settings import DevConfig
 from conduit.settings import ProdConfig

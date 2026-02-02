@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """User models."""
+
 import datetime as dt
 
 from conduit.database import Column

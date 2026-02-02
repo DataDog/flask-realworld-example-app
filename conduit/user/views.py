@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """User views."""
+
 from flask import Blueprint
 from flask import request
 from flask_apispec import marshal_with
