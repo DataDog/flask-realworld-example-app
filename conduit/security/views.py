@@ -4,6 +4,7 @@ Security views work to validate the below Datadog products in real-world scenari
 - Application Security Management: [Link](https://docs.datadoghq.com/security/application_security/)
 - Application Vulnerability Management (IAST): [Link](https://docs.datadoghq.com/security/application_security/vulnerability_management/)
 """
+
 import json
 import os
 import random

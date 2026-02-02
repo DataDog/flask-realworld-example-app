@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Application configuration."""
+
 from datetime import timedelta
 import os
 
