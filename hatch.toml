@@ -73,6 +73,8 @@ test = [
     "python -m pytest -s --ddtrace --ddtrace-patch-all --no-cov",
 ]
 cov = [
+    "python -m pip install -r requirements/dev.txt",
+    "pip freeze",
     "pytest --cov=conduit --cov-report=xml --cov-report=html --cov-report=term -vvv tests/",
 ]
 
