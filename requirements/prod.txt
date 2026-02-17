@@ -19,7 +19,7 @@ MarkupSafe==3.0.3
 marshmallow==3.26.2
 packaging==23.2
 psycopg2==2.9.11
-PyJWT==2.8.0
+PyJWT==2.11.0
 pycparser==2.20
 python-dateutil==2.9.0.post0
 python-dotenv==0.12.0
