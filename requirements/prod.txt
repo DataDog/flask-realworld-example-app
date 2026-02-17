@@ -21,7 +21,7 @@ packaging==23.2
 psycopg2==2.9.11
 PyJWT==2.8.0
 pycparser==2.20
-python-dateutil==2.8.1
+python-dateutil==2.9.0.post0
 python-dotenv==0.12.0
 python-editor==1.0.4
 simplejson==3.17.0
