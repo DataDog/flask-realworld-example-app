@@ -12,7 +12,7 @@ jobs:
   check-format:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
         # Include all history and tags
         with:
           fetch-depth: 0
