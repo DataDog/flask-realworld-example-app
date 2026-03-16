@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98 # v4.3.1
 
       - name: Install hatch
-        uses: pypa/hatch@install
+        uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install
         with:
           version: "1.16.3"
 
@@ -23,7 +23,7 @@ jobs:
           hatch run +py=3.12 unit_tests:cov
 
       - name: Upload coverage reports
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
           file: ./coverage.xml
           flags: unittests
