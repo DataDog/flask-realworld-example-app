@@ -18,6 +18,8 @@ updates:
       include: "scope"
     
   # GitHub Actions
+    cooldown:
+      default-days: 2
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -30,3 +32,5 @@ updates:
       - "ci"
     commit-message:
       prefix: "chore(ci)"
+    cooldown:
+      default-days: 2
