@@ -50,6 +50,27 @@ def register_blueprints(app):
     app.register_blueprint(articles.views.blueprint)
     app.register_blueprint(security.views.blueprint)
 
+    # Optional: register a basic health endpoint and Prometheus metrics
+    # if the helper modules are available at runtime. We import inside
+    # the function to avoid forcing extra dependencies during install.
+    try:
+        from app_health import health_bp
+
+        app.register_blueprint(health_bp)
+    except Exception:
+        # If the module isn't present or registration fails, continue silently.
+        pass
+
+    try:
+        from metrics import after_request, metrics_endpoint
+
+        # Register a simple after_request hook to collect request metrics
+        app.after_request(after_request)
+        # Expose Prometheus metrics at /metrics
+        app.add_url_rule("/metrics", "metrics", metrics_endpoint)
+    except Exception:
+        pass
+
 
 def register_errorhandlers(app):
     def errorhandler(error):
