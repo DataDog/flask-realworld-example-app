@@ -34,3 +34,4 @@ webargs==8.7.1
 Werkzeug==3.1.6
 requests==2.32.5
 urllib3==2.6.3
+prometheus_client
