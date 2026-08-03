@@ -7,13 +7,20 @@ services:
       - "8080:8080"
     environment:
       - FLASK_ENV=production
+      - DATABASE_URL=postgresql://conduit:conduit@db:5432/conduit
+      - CONDUIT_SECRET=dev-secret-key
+      # Optional: Datadog local testing variables (remove if not needed)
+      - DD_AGENT_HOST=datadog-agent
+      - DD_SERVICE=flask-realworld-app
+      - DD_ENV=development
+      - DD_TRACE_ENABLED=true
     depends_on:
       - db
   db:
     image: postgres:15
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
-      POSTGRES_DB: realworld
+      POSTGRES_USER: conduit
+      POSTGRES_PASSWORD: conduit
+      POSTGRES_DB: conduit
     ports:
       - "5432:5432"
