@@ -1,6 +1,6 @@
 # Flask RealWorld Example App - Datadog APM & IAST Testing
 
-[![Check-Format](https://github.com/DataDog/flask-realworld-example-app/actions/workflows/check_format.yml/badge.svg)](https://github.com/DataDog/flask-realworld-example-app/actions/workflows/check_format.yml)
+[![Check-Format](https://github.com/DataDog/flask-realworld-example-app/actions/workflows/check_format.yml/badge.svg)](https://github.com/DataDog/flask-realworld-example-app/actions/workflows/check[...]
 ![Python Versions](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.12%20%7C%203.14-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -38,6 +38,38 @@ This project is maintained by Datadog and serves as a reference implementation f
 
 ## Quick Start
 
+This section gives two fast ways to run the app locally: using Docker Compose (recommended for a quick demo) or using the local Python development setup.
+
+### Using Docker Compose (recommended)
+
+1. Copy the example environment file and customize if needed:
+
+```bash
+cp .env.example .env
+```
+
+2. Start the app and Postgres with Docker Compose:
+
+```bash
+docker-compose up --build
+```
+
+3. Verify the app is up:
+
+```bash
+curl http://localhost:8080/health
+curl http://localhost:8080/metrics
+```
+
+Ports used by the compose setup:
+- App: http://localhost:8080
+- Prometheus (if running monitoring compose): http://localhost:9090
+- Grafana: http://localhost:3000
+
+### Local Python development
+
+Follow the Development Setup below to run the app locally without containers.
+
 ### Prerequisites
 
 - Python 3.9 or higher
@@ -59,7 +91,7 @@ cd flask-realworld-example-app
 pip install hatch
 ```
 
-3. Set required environment variables:
+3. Set required environment variables (if not using Docker Compose):
 
 ```bash
 export CONDUIT_SECRET='your-secret-key-here'
