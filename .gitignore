@@ -59,3 +59,7 @@ dev.db
 *.idx
 *.pack
 *.rev
+
+# Local/dev helper files
+pr_body.json
+pr_description.md
