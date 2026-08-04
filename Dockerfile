@@ -1,28 +1,27 @@
-FROM python:3.14-slim
+# 基于官方 Python 镜像
+FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    postgresql-client \
+# 安装系统依赖（如需编译某些 Python 包，可在此添加 apt 包）
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements
-COPY requirements/prod.txt requirements/dev.txt ./
+# 复制依赖并安装
+COPY requirements.txt .
+# requirements.txt 引用了 requirements/prod.txt —— 把 requirements/ 目录也一并复制，
+# 否则 pip 在解析 -r requirements/prod.txt 时会找不到该文件。
+COPY requirements/ ./requirements/
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r dev.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application
+# 复制应用代码
 COPY . .
 
-# Set environment variables
-ENV FLASK_APP=autoapp.py
+ENV FLASK_ENV=production
 ENV PYTHONUNBUFFERED=1
 
-# Expose port
-EXPOSE 5000
-
-# Run migrations and start app
-CMD ["sh", "-c", "flask db upgrade && ddtrace-run flask run --host=0.0.0.0"]
+# 使用仓库中的 autoapp.py 作为 gunicorn 的入口（仓库中没有顶级 app.py）
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "autoapp:app"]
