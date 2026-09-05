@@ -10,7 +10,9 @@ from flask_apispec import use_kwargs
 from flask_jwt_extended import current_user
 from flask_jwt_extended import jwt_required
 from marshmallow import fields
+from sqlalchemy.exc import IntegrityError
 
+from conduit.database import db
 from conduit.exceptions import InvalidUsage
 from conduit.user.models import User
 
@@ -60,7 +62,10 @@ def make_article(**kwargs):
     body = data["article"]["body"]
     title = data["article"]["title"]
     description = data["article"]["description"]
-    tagList = data["article"]["tagList"]
+    # tagList is documented as optional; do not assume the client sent it.
+    tagList = data["article"].get("tagList")
+    if not title or not title.strip():
+        raise InvalidUsage("Title must not be empty", status_code=422)
     article = Article(title=title, description=description, body=body, author=current_user.profile)
     if tagList is not None:
         for tag in tagList:
@@ -69,7 +74,11 @@ def make_article(**kwargs):
                 mtag = Tags(tag)
                 mtag.save()
             article.add_tag(mtag)
-    article.save()
+    try:
+        article.save()
+    except IntegrityError:
+        db.session.rollback()
+        raise InvalidUsage("An article with this title (slug) already exists", status_code=422)
     return article_schema.dump(article)
 
 
@@ -87,9 +96,11 @@ def update_article(slug, **kwargs):
 
 
 @blueprint.route("/api/articles/<slug>", methods=("DELETE",))
-@jwt_required(optional=True)
+@jwt_required()
 def delete_article(slug):
     article = Article.query.filter_by(slug=slug, author_id=current_user.profile.id).first()
+    if not article:
+        raise InvalidUsage.article_not_found()
     article.delete()
     return "", 200
 
@@ -191,5 +202,7 @@ def delete_comment_on_article(slug, cid):
         raise InvalidUsage.article_not_found()
 
     comment = article.comments.filter_by(id=cid, author=current_user.profile).first()
+    if not comment:
+        raise InvalidUsage.comment_not_owned()
     comment.delete()
     return "", 200
